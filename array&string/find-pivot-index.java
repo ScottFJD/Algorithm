@@ -37,14 +37,29 @@ nums 的长度范围为 [0, 10000]。
 
 
     public static void main(String[] args) {
-           Name name = new Name();
-           name.logcat("test");
-        }
-
-    static class Name{
-        public void logcat(String log){
-            System.out.println(log);
-        }
+        Solution solution = new Solution();
+        int[] testCase = {1,7,3,6,5,6};
+        System.out.println(solution.pivotIndex(testCase));
     }
 
+    static class Solution{
+        /**
+         * 时间复杂度O(N)
+         * 空间复杂度O(1)
+         * @param nums
+         * @return
+         */
+        public int pivotIndex(int[] nums){
+            int sum = 0,leftSum = 0;
+            for (int i : nums) {
+                sum+=i;
+            }
+            for (int i = 0; i < nums.length; i++) {
+                if(leftSum==sum-nums[i]-leftSum) return i;
+                leftSum+=nums[i];
+            }
+
+            return -1;
+        }
+    }
 }
