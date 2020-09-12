@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 class test3 {
     /*
     给出一个区间的集合，请合并所有重叠的区间。
@@ -31,13 +33,59 @@ intervals[i][0] <= intervals[i][1]
     
 
     public static void main(String[] args) {
-        
+        Solution solution = new Solution();
+        int[][] testCase = {{1,3},{2,6},{8,10},{15,18}};
+        for (int[] is : solution.merge(testCase)) {
+            System.out.println(String.valueOf(is[0])+String.valueOf(is[1]));
+        }
+
+        for (int[] is : solution.mergeV2(testCase)) {
+            System.out.println(String.valueOf(is[0])+String.valueOf(is[1]));
+        }
     }
 
     static class Solution{
         public int[][] merge(int[][] intervals){
+            Arrays.sort(intervals,(v1,v2) -> v1[0]-v2[0]);
+
+            int[][] res = new int[intervals.length][2];
+            int idx = -1;
+            for(int[] interval: intervals){
+                if(idx==-1 || interval[0] > res[idx][1]){
+                    res[++idx] = interval;
+                }else{
+                    res[idx][1] = Math.max(res[idx][1], interval[1]);
+                }
+            }
+
+            return Arrays.copyOf(res, idx+1);
             
         }
+
+
+        public int[][] mergeV2(int[][] intervals) {
+            //将区间按起始位排序
+            Arrays.sort(intervals,(v1,v2)->v1[0]-v2[0]);
+
+            int[][] merge = new int[intervals.length][2];
+            
+            int index = -1;
+            for (int[] is : intervals) {
+                //如果第一个区间的末端小于后面一个区间的起始端 则添加，否则mege 末端
+                if (index==-1|| merge[index][1]<is[1]) {
+                    merge[++index] = is;
+                }else{
+                    merge[index][1] = Math.max(merge[index][1], is[1]);
+                }
+                
+            }
+
+            System.out.println(index);
+            //复制有效的区间并返回
+            return Arrays.copyOf(merge, index+1);
+            
+        }
+
     }
 
 }
